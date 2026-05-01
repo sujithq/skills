@@ -1,7 +1,6 @@
 {
   "name": "sujithq-skills",
-  "skills": [
-    "./.agent/skills/commit-message-writer",
-    "./.agent/skills/pdf-2-markdown"
-  ]
+  "description": "PDF-to-Markdown conversion and conventional commit message generation skills",
+  "version": "1.0.0",
+  "skills": ".agent/skills/"
 }

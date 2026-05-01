@@ -21,7 +21,13 @@ npx skills add sujithq/skills/pdf-to-markdown
 npx skills add sujithq/skills/commit-message-writer
 ```
 
-Skills are also installable via the [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces):
+Skills are also installable via the [GitHub Copilot CLI](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-cli-plugins) `/plugin` command:
+
+```
+/plugin install sujithq/skills
+```
+
+Or via the plugin marketplace:
 
 ```
 /plugin marketplace add sujithq/skills
