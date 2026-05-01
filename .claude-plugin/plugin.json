@@ -1,0 +1,7 @@
+{
+  "name": "sujithq-skills",
+  "skills": [
+    "./.agent/skills/commit-message-writer",
+    "./.agent/skills/pdf-2-markdown"
+  ]
+}

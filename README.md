@@ -20,3 +20,5 @@ Install one skill:
 npx skills add sujithq/skills/pdf-to-markdown
 npx skills add sujithq/skills/commit-message-writer
 ```
+
+Skills are also discoverable via the [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces) through the `.claude-plugin/plugin.json` manifest included in this repository.
