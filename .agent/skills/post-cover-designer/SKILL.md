@@ -1,11 +1,13 @@
 ---
 name: post-cover-designer
-description: Designs and generates a cover image for Hugo blog posts. Use when creating a new post and a cover image is needed. Generates both a designer.microsoft.com prompt and the actual cover image, then saves it to the correct post path.
+description: Designs and generates a cover image for Hugo blog posts using Pillow. Use when creating a new post and a cover image is needed. Installs Pillow, runs the generation script, and saves cover.jpg to the correct post path.
 ---
 
 # Post Cover Designer
 
-This skill creates a cover image for a Hugo blog post. It builds a tailored image prompt, generates the image directly, and saves it as `cover.jpg` in the correct post folder.
+This skill creates a `cover.jpg` for a Hugo blog post using the bundled Pillow-based script.
+It picks colour values from the post content, runs the script to produce a 1600×900 JPEG,
+and saves it in the right location — no external image service required.
 
 ## When to use
 
@@ -18,82 +20,73 @@ This skill creates a cover image for a Hugo blog post. It builds a tailored imag
 Collect the following before proceeding (infer from the post content if already available):
 
 - **Post title and slug** (e.g. `2024-06-15-azure-copilot-intro`)
-- **Post summary** (one or two sentences describing the post)
-- **Target audience** (e.g. cloud architects, developers, enterprise teams)
-- **Core technologies** mentioned in the post (e.g. Azure, Bicep, GitHub Actions)
-- **3–5 key concepts** to visualise (e.g. pipeline, deployment, cloud infrastructure)
+- **Core technologies** mentioned in the post (e.g. `Azure,Bicep,GitHub Actions`)
+- **Colour direction** — choose or derive:
+  - `--bg-color`: dominant background colour in hex (default `#0a1628` — deep navy)
+  - `--accent-color`: accent / pill colour in hex (default `#00b4d8` — cyan)
 
-## Step 1 – Build the cover prompt
+  Suggested palettes by topic:
+  | Topic area | `--bg-color` | `--accent-color` |
+  |------------|-------------|-----------------|
+  | Azure / cloud | `#0a1628` | `#00b4d8` |
+  | Security | `#1a0a28` | `#e040fb` |
+  | DevOps / CI-CD | `#0d1f0a` | `#76c442` |
+  | AI / ML | `#0a1020` | `#f4a261` |
+  | Kubernetes | `#0a1628` | `#326ce5` |
 
-Construct a focused image prompt using these rules:
+## Step 1 – Install Pillow
 
-- Use concrete nouns and visual anchors (e.g. "pipeline diagram", "cloud architecture blueprint") rather than generic adjectives.
-- Include at least one architecture or workflow metaphor that fits the article topic.
-- Reference topic-specific motifs tied to the technologies and concepts identified.
-- Specify composition style: clean, technical, modern, enterprise-friendly.
-- Include a colour direction (e.g. "deep blue and white tones with subtle gradients").
-- Keep the prompt concise but detailed enough to be unambiguous.
-- Avoid references to specific people, real logos, or copyrighted artwork styles.
-- Avoid visual clutter and text-heavy scenes.
+Run once per environment before generating any cover:
 
-Example prompt structure:
-```
-A clean, modern technical illustration showing [main concept], with [technology motifs],
-[composition details], [colour palette], suited for a [audience] audience.
-No people, no logos, no text overlays.
+```bash
+pip install pillow
 ```
 
 ## Step 2 – Generate the cover image
 
-Use the `generate_image` tool with the prompt constructed in Step 1.
+Run the bundled script from the repository root.  
+The script path is relative to the installed skill; adjust if needed.
 
-- Set the aspect ratio to **16:9** (landscape, suitable for blog cover images).
-- Generate exactly **one image**.
-- If the tool supports a style parameter, use `"photorealistic"` or `"digital art"` — whichever produces the cleanest technical result.
-
-## Step 3 – Save the image
-
-Save the generated image to:
-
-```
-content/posts/<slug>/cover.jpg
+```bash
+python .agent/skills/post-cover-designer/scripts/generate_cover.py \
+  --title "<post title>" \
+  --output "content/posts/<slug>/cover.jpg" \
+  --technologies "<Tech1>,<Tech2>,<Tech3>" \
+  --bg-color "#0a1628" \
+  --accent-color "#00b4d8"
 ```
 
-Where `<slug>` is the full post folder name, e.g. `2024-06-15-azure-copilot-intro`.
+**Arguments:**
 
-- Save as **JPEG** format with filename exactly `cover.jpg`.
-- If the target directory does not exist, create it.
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--title` | ✅ | Full post title (used as headline text on the cover) |
+| `--output` | ✅ | Destination path, must end with `cover.jpg` |
+| `--technologies` | optional | Comma-separated list of technology tags shown as pills |
+| `--bg-color` | optional | Background hex colour (default `#0a1628`) |
+| `--accent-color` | optional | Accent / pill hex colour (default `#00b4d8`) |
 
-## Step 4 – Update front matter
+The script will:
+1. Create the output directory if it does not exist.
+2. Render a 1600×900 gradient canvas with a subtle technical grid.
+3. Draw the title as large white text with a drop shadow.
+4. Render each technology as a coloured pill at the bottom of the image.
+5. Save the result as a JPEG at the path specified by `--output`.
+
+## Step 3 – Update front matter
 
 Ensure the post's front matter includes:
 
 ```toml
-cover       = true
-author      = "sujith"
-cover_prompt = '''
-<the prompt used in Step 1>
-'''
-```
-
-## Step 5 – Provide the Designer fallback
-
-After completing Steps 2–4, also output the manual fallback for reference:
-
-```
-Designer Action (manual fallback):
-1. Open designer.microsoft.com.
-2. Paste this prompt:
-   <cover_prompt_text>
-3. Export as JPG.
-4. Save as: content/posts/<slug>/cover.jpg
+cover        = true
+author       = "sujith"
+cover_prompt = "Pillow-generated cover: <title> | <technologies> | bg:<bg-color> accent:<accent-color>"
 ```
 
 ## Quality checks
 
-- [ ] Prompt reflects the actual article content, not a generic template.
-- [ ] Prompt includes at least one architecture/workflow metaphor where appropriate.
-- [ ] Prompt avoids visual clutter and text-heavy scenes.
-- [ ] Generated image is saved at the correct path with filename `cover.jpg`.
+- [ ] `pip install pillow` ran without errors.
+- [ ] Script exited with `Cover saved → content/posts/<slug>/cover.jpg`.
+- [ ] Output file exists and is a valid JPEG at `content/posts/<slug>/cover.jpg`.
 - [ ] Front matter contains `cover = true`, `author = "sujith"`, and `cover_prompt`.
-- [ ] Designer fallback prompt is included in the output.
+- [ ] Technology tags fit on one line (max ~8 short tags); reduce if overflow occurs.

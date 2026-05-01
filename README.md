@@ -5,7 +5,7 @@ Collection of skills
 
 - `pdf-to-markdown`: Convert PDF and Office files to Markdown with `markitdown`.
 - `commit-message-writer`: Generate conventional commit messages from code change summaries.
-- `post-cover-designer`: Design and generate a cover image for Hugo blog posts — builds the prompt, creates the image, and saves it to the correct post path.
+- `post-cover-designer`: Design and generate a cover image for Hugo blog posts — installs Pillow, runs the bundled script, and saves `cover.jpg` to the correct post path.
 
 ## Install
 
