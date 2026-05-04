@@ -6,7 +6,8 @@ on:
       - 'v*'
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: read
 
 jobs:
   publish:
@@ -14,11 +15,35 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install conventional-changelog
+        run: npm install -g conventional-changelog-cli
+
+      - name: Generate changelog
+        run: |
+          conventional-changelog -p angular -i CHANGELOG.md -s
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add CHANGELOG.md
+          git commit -m "docs: update changelog for ${{ github.ref_name }}" || echo "No changes to commit"
+          git push origin main || echo "Push failed (may have no changes)"
 
       - name: Install GitHub CLI
         run: |
           sudo apt-get update
           sudo apt-get install -y gh
+
+      - name: Install gh skill extension
+        run: gh extension install github/gh-skill
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish skills
         run: gh skill publish --tag ${{ github.ref_name }}
