@@ -1,3 +1,14 @@
+# [](https://github.com/sujithq/skills/compare/v1.5.0...v) (2026-05-04)
+
+
+### Bug Fixes
+
+* update confirmation prompt for publishing skills ([3465ee6](https://github.com/sujithq/skills/commit/3465ee63802f17e931cafac060f3036ae38ac43d))
+
+
+### Features
+
+* add git tag creation and sync after publishing skills ([8dc268a](https://github.com/sujithq/skills/commit/8dc268af5dfc0ff01cd3f3bf1d89d23b5e89d3d0))
 # [](https://github.com/sujithq/skills/compare/v1.4.7...v) (2026-05-04)
 
 
