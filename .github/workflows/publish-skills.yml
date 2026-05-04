@@ -35,10 +35,10 @@ jobs:
           git commit -m "docs: update changelog for ${{ github.ref_name }}" || echo "No changes to commit"
           git push origin HEAD:main || echo "Push failed (may have no changes)"
 
-      - name: Verify GitHub CLI skill support
+      - name: Upgrade GitHub CLI
         run: |
-          gh --version
-          gh skill --help
+          sudo apt-get update
+          sudo apt-get install -y gh
 
       - name: Publish skills
         run: gh skill publish --tag ${{ github.ref_name }}
