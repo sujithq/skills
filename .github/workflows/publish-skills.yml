@@ -35,15 +35,10 @@ jobs:
           git commit -m "docs: update changelog for ${{ github.ref_name }}" || echo "No changes to commit"
           git push origin HEAD:main || echo "Push failed (may have no changes)"
 
-      - name: Install GitHub CLI
+      - name: Verify GitHub CLI skill support
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gh
-
-      - name: Install gh skill extension
-        run: gh extension install github/gh-skill
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          gh --version
+          gh skill --help
 
       - name: Publish skills
         run: gh skill publish --tag ${{ github.ref_name }}
