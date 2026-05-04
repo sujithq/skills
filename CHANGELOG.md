@@ -1,3 +1,9 @@
+# [](https://github.com/sujithq/skills/compare/v1.6.0...v) (2026-05-04)
+
+
+### Features
+
+* enhance git tag handling in publish script and add .gitattributes for consistent line endings ([7500434](https://github.com/sujithq/skills/commit/7500434d7b67ada2dd55125825e98a71a85d9709))
 # [](https://github.com/sujithq/skills/compare/v1.5.0...v) (2026-05-04)
 
 
