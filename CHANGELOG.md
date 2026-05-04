@@ -1,3 +1,9 @@
+# [](https://github.com/sujithq/skills/compare/v1.4.7...v) (2026-05-04)
+
+
+### Features
+
+* add automated publish and version suggestion scripts ([bfb15a8](https://github.com/sujithq/skills/commit/bfb15a86f89ddb5d33339fab7a2ef63a2fadbf7a))
 # [](https://github.com/sujithq/skills/compare/v1.4.6...v) (2026-05-04)
 # [](https://github.com/sujithq/skills/compare/v1.4.5...v) (2026-05-04)
 # [](https://github.com/sujithq/skills/compare/v1.4.3...v) (2026-05-04)
