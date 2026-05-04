@@ -139,12 +139,19 @@ try {
 # Create git tag to sync with release
 Write-Host "[4/4] Syncing git tag..." -ForegroundColor Cyan
 try {
-    git tag $suggestedVersion
-    git push origin $suggestedVersion
-    Write-Host "  ✓ Git tag created and pushed" -ForegroundColor Green
+    $tagExists = git tag -l $suggestedVersion
+    if ($tagExists) {
+        Write-Host "  ℹ Git tag $suggestedVersion already exists locally" -ForegroundColor Gray
+    } else {
+        git tag $suggestedVersion
+        Write-Host "  ✓ Git tag created: $suggestedVersion" -ForegroundColor Green
+    }
+    
+    git push origin $suggestedVersion 2>&1 | Out-Null
+    Write-Host "  ✓ Git tag pushed" -ForegroundColor Green
 } catch {
     Write-Host "  ✘ Git tag sync failed: $_" -ForegroundColor Red
-    Write-Host "  Note: Release published, but git tag not synced. Run: git tag $suggestedVersion && git push origin $suggestedVersion" -ForegroundColor Yellow
+    Write-Host "  Note: Release published, but git tag may not be synced. Run: git tag $suggestedVersion && git push origin $suggestedVersion" -ForegroundColor Yellow
 }
 
 Write-Host "`n✓ Done! Published $suggestedVersion" -ForegroundColor Green
