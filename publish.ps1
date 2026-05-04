@@ -89,8 +89,8 @@ if ($userVersion) {
 }
 
 # Confirm
-$confirm = Read-Host "`nPublish skills as $suggestedVersion`? (y/n)"
-if ($confirm -ne 'y') {
+$confirm = Read-Host "`nPublish skills as $suggestedVersion`? (Y/n)"
+if ($confirm -eq 'n' -or $confirm -eq 'no') {
     Write-Host "Aborted." -ForegroundColor Yellow
     exit 1
 }
