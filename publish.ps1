@@ -136,5 +136,16 @@ try {
     exit 1
 }
 
+# Create git tag to sync with release
+Write-Host "[4/4] Syncing git tag..." -ForegroundColor Cyan
+try {
+    git tag $suggestedVersion
+    git push origin $suggestedVersion
+    Write-Host "  ✓ Git tag created and pushed" -ForegroundColor Green
+} catch {
+    Write-Host "  ✘ Git tag sync failed: $_" -ForegroundColor Red
+    Write-Host "  Note: Release published, but git tag not synced. Run: git tag $suggestedVersion && git push origin $suggestedVersion" -ForegroundColor Yellow
+}
+
 Write-Host "`n✓ Done! Published $suggestedVersion" -ForegroundColor Green
 Write-Host "`nInstall with:`n  gh skill install sujithq/skills`n" -ForegroundColor Cyan
