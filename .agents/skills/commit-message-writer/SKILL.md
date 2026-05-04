@@ -1,6 +1,7 @@
 ---
 name: commit-message-writer
 description: Generates clear, conventional commit messages from a summary of code changes. Use when asked to write a commit message, summarize changes for commit, or create Conventional Commits format messages.
+license: MIT
 ---
 
 # Commit Message Writer

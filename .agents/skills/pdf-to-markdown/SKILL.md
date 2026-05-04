@@ -1,6 +1,7 @@
 ---
 name: pdf-to-markdown
 description: Converts PDF files to Markdown using Microsoft's markitdown package. Use this skill when the user asks to convert a PDF to Markdown, extract text from a PDF, or read/parse PDF content.
+license: MIT
 argument-hint: "[path to file]"
 ---
 
