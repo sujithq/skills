@@ -1,0 +1,18 @@
+{
+  "name": "sujithq-skills",
+  "owner": {
+    "name": "Sujith Quintelier",
+    "url": "https://github.com/sujithq"
+  },
+  "metadata": {
+    "description": "Collection of agent skills: PDF-to-Markdown conversion and conventional commit message generation",
+    "repository": "https://github.com/sujithq/skills"
+  },
+  "plugins": [
+    {
+      "name": "sujithq-skills",
+      "description": "PDF-to-Markdown conversion and conventional commit message generation skills",
+      "source": "./"
+    }
+  ]
+}
