@@ -23,18 +23,36 @@ This skill generates images using Azure OpenAI's DALL-E models through direct AP
    - Note your endpoint: `https://YOUR-RESOURCE.openai.azure.com/`
    - Note your deployment name (e.g., `dall-e-3`)
 
-2. **Authentication** (choose one)
+2. **Authentication**
 
-   **Option A: API Key** (simplest)
+   **Important**: Many Azure OpenAI endpoints disable API key authentication for security. Always verify your endpoint's authentication requirements.
+
+   **Option A: Azure RBAC (Recommended)**
+
+   For local development:
+   ```bash
+   az login
+   # Ensure you have "Cognitive Services OpenAI User" role assigned
+   ```
+
+   For Azure-hosted applications:
+   ```bash
+   # Enable managed identity on your Azure resource
+   az webapp identity assign --name <app-name> --resource-group <rg-name>
+
+   # Assign the required role
+   az role assignment create \
+     --assignee <managed-identity-principal-id> \
+     --role "Cognitive Services OpenAI User" \
+     --scope <azure-openai-resource-id>
+   ```
+
+   **Option B: API Key** (if enabled on your endpoint)
    ```bash
    export AZURE_OPENAI_API_KEY="your-api-key-here"
    ```
 
-   **Option B: Azure CLI** (recommended for local development)
-   ```bash
-   az login
-   # Ensure you have "Cognitive Services OpenAI User" role
-   ```
+   **Note**: If API key authentication is disabled, you must use Azure RBAC with proper role assignments.
 
 ## How to use
 
@@ -42,20 +60,25 @@ This skill generates images using Azure OpenAI's DALL-E models through direct AP
 
 Install the Azure OpenAI SDK:
 ```bash
-pip install openai
+pip install openai azure-identity
 ```
 
-Generate an image with Python:
+Generate an image with Python using Azure RBAC (recommended):
 ```python
 from openai import AzureOpenAI
-import os
-import json
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 
-# Initialize client
+# Use DefaultAzureCredential for keyless authentication
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(),
+    "https://cognitiveservices.azure.com/.default"
+)
+
+# Initialize client with Azure RBAC
 client = AzureOpenAI(
     api_version="2024-02-01",
-    azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
-    api_key=os.environ.get("AZURE_OPENAI_API_KEY")  # or use Azure CLI auth
+    azure_endpoint="https://YOUR-RESOURCE.openai.azure.com/",
+    azure_ad_token_provider=token_provider
 )
 
 # Generate image
@@ -67,14 +90,53 @@ result = client.images.generate(
     n=1
 )
 
-# Save the image
+# Get the image URL
 image_url = result.data[0].url
 print(f"Image URL: {image_url}")
 ```
 
+Alternative with API Key (if enabled):
+```python
+from openai import AzureOpenAI
+import os
+
+# Initialize client with API key
+client = AzureOpenAI(
+    api_version="2024-02-01",
+    azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+    api_key=os.environ["AZURE_OPENAI_API_KEY"]
+)
+
+# Generate image
+result = client.images.generate(
+    model="dall-e-3",
+    prompt="A serene mountain landscape at sunset",
+    size="1024x1024"
+)
+
+print(result.data[0].url)
+```
+
 ### Using curl (Quick testing)
 
-With API key:
+With Azure RBAC (recommended):
+```bash
+# Get an access token using Azure CLI
+TOKEN=$(az account get-access-token --resource https://cognitiveservices.azure.com --query accessToken -o tsv)
+
+# Make the API call
+curl "https://YOUR-RESOURCE.openai.azure.com/openai/deployments/dall-e-3/images/generations?api-version=2024-02-01" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "prompt": "A serene mountain landscape at sunset",
+    "size": "1024x1024",
+    "quality": "standard",
+    "n": 1
+  }'
+```
+
+With API key (if enabled):
 ```bash
 curl "https://YOUR-RESOURCE.openai.azure.com/openai/deployments/dall-e-3/images/generations?api-version=2024-02-01" \
   -H "Content-Type: application/json" \
@@ -116,15 +178,21 @@ Create effective prompts by:
 
 ## Examples
 
-**Example 1: Basic image generation with Python**
+**Example 1: Basic image generation with Azure RBAC**
 ```python
 from openai import AzureOpenAI
-import os
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+
+# Use DefaultAzureCredential for keyless authentication
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(),
+    "https://cognitiveservices.azure.com/.default"
+)
 
 client = AzureOpenAI(
     api_version="2024-02-01",
     azure_endpoint="https://YOUR-RESOURCE.openai.azure.com/",
-    api_key=os.environ["AZURE_OPENAI_API_KEY"]
+    azure_ad_token_provider=token_provider
 )
 
 result = client.images.generate(
@@ -216,35 +284,90 @@ The API returns:
 
 Common issues and solutions:
 
-- **401 Unauthorized**: Check your API key or Azure CLI login status
-- **403 Forbidden**: Verify you have "Cognitive Services OpenAI User" role assigned
-- **429 Too Many Requests**: Rate limit reached, wait and retry
+- **401 Unauthorized**:
+  - If using API key: Check your API key is correct and not expired
+  - If using RBAC: Run `az login` or verify your managed identity is enabled
+  - Verify the endpoint hasn't disabled API key authentication (use RBAC instead)
+
+- **403 Forbidden**:
+  - Verify you have "Cognitive Services OpenAI User" role assigned
+  - Check role assignment scope includes your Azure OpenAI resource
+  - For managed identity: Ensure the identity has proper RBAC assignments
+  - Run: `az role assignment list --assignee <your-user-or-identity-id> --scope <azure-openai-resource-id>`
+
+- **API Key Disabled Error**:
+  - Your Azure OpenAI endpoint has disabled API key authentication
+  - Switch to Azure RBAC authentication using DefaultAzureCredential
+  - Ensure proper role assignments are in place
+
+- **429 Too Many Requests**:
+  - Rate limit reached, wait and retry with exponential backoff
+  - Check your quota limits in Azure Portal
+
 - **400 Bad Request**:
   - Check prompt length (max 4000 characters)
   - Verify size parameter matches available options
   - Ensure n=1 for DALL-E 3
-- **Content filtered**: Revise prompt to comply with content policies
+
+- **Content filtered**:
+  - Revise prompt to comply with Azure content policies
+  - Remove potentially sensitive or inappropriate content
 
 ## Best Practices
 
-1. **Prompt Quality**: Be specific and detailed for better results
-2. **Size Selection**: Choose dimensions appropriate for the use case
-3. **Quality vs Cost**: Use `standard` unless high detail is needed
-4. **Save Images**: URLs expire after 24 hours - download if needed
-5. **Error Handling**: Always implement retry logic for rate limits
-6. **Cost Management**: Monitor usage in Azure Portal
+1. **Authentication**: Use Azure RBAC (DefaultAzureCredential) over API keys for better security
+2. **Prompt Quality**: Be specific and detailed for better results
+3. **Size Selection**: Choose dimensions appropriate for the use case
+4. **Quality vs Cost**: Use `standard` unless high detail is needed
+5. **Save Images**: URLs expire after 24 hours - download if needed
+6. **Error Handling**: Always implement retry logic for rate limits
+7. **Cost Management**: Monitor usage in Azure Portal
+8. **RBAC Roles**: Ensure proper "Cognitive Services OpenAI User" role assignments
 
 ## Environment Variables
 
-Set these for easier usage:
+For RBAC-based authentication (recommended):
+```bash
+export AZURE_OPENAI_ENDPOINT="https://YOUR-RESOURCE.openai.azure.com/"
+export AZURE_OPENAI_DEPLOYMENT="dall-e-3"
+# No API key needed - uses DefaultAzureCredential
+```
+
+For API key authentication (if enabled):
 ```bash
 export AZURE_OPENAI_ENDPOINT="https://YOUR-RESOURCE.openai.azure.com/"
 export AZURE_OPENAI_API_KEY="your-api-key"
 export AZURE_OPENAI_DEPLOYMENT="dall-e-3"
 ```
 
-Then in Python:
+Python usage with RBAC:
 ```python
+from openai import AzureOpenAI
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+import os
+
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(),
+    "https://cognitiveservices.azure.com/.default"
+)
+
+client = AzureOpenAI(
+    api_version="2024-02-01",
+    azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+    azure_ad_token_provider=token_provider
+)
+
+result = client.images.generate(
+    model=os.environ["AZURE_OPENAI_DEPLOYMENT"],
+    prompt="Your prompt here"
+)
+```
+
+Python usage with API key:
+```python
+from openai import AzureOpenAI
+import os
+
 client = AzureOpenAI(
     api_version="2024-02-01",
     azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
