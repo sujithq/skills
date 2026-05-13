@@ -1,12 +1,13 @@
 {
   "name": "sujithq-skills",
   "displayName": "Sujithq's Skills Collection",
-  "description": "A collection of productivity skills for GitHub Copilot CLI: commit message generation and PDF-to-Markdown conversion",
+  "description": "A collection of productivity skills for GitHub Copilot CLI: commit message generation, PDF-to-Markdown conversion, and AI image generation",
   "version": "1.0.0",
   "license": "MIT",
   "author": "sujithq",
   "skills": [
     "skills/commit-message-writer",
-    "skills/pdf-to-markdown"
+    "skills/pdf-to-markdown",
+    "skills/create-image"
   ]
 }

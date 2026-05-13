@@ -6,6 +6,7 @@ Collection of GitHub Copilot skills for enhanced productivity.
 
 - **pdf-to-markdown**: Convert PDF and Office files to Markdown using Microsoft's `markitdown` package. Supports multiple file formats: PDF, PowerPoint, Word, Excel.
 - **commit-message-writer**: Generate conventional commit messages following best practices. Supports all standard commit types: feat, fix, docs, style, refactor, perf, test, chore.
+- **create-image**: Generate images using Azure OpenAI DALL-E models through direct API calls. Provides Python and curl examples for AI-powered image creation with customizable quality, size, and style options.
 
 ## Installation
 
@@ -29,6 +30,7 @@ Install skills one at a time:
 ```powershell
 gh skill install sujithq/skills commit-message-writer
 gh skill install sujithq/skills pdf-to-markdown
+gh skill install sujithq/skills create-image
 ```
 
 ### Option 3: Install from Marketplace (Future)
@@ -73,7 +75,9 @@ npm install -g @commitlint/cli @commitlint/config-conventional
 ├── skills/                 # Skill definitions
 │   ├── commit-message-writer/
 │   │   └── SKILL.md
-│   └── pdf-to-markdown/
+│   ├── pdf-to-markdown/
+│   │   └── SKILL.md
+│   └── create-image/
 │       └── SKILL.md
 ├── plugin.json            # Plugin manifest for all-in-one install
 ├── publish.ps1            # Publishing automation script
@@ -158,6 +162,7 @@ This project enforces [Conventional Commits](https://www.conventionalcommits.org
 **Scope** (optional):
 - `commit-writer`: Commit message writer skill
 - `pdf-markdown`: PDF to Markdown converter skill
+- `create-image`: Azure Image MCP Server skill
 
 **Subject** (required):
 - Imperative mood ("add" not "added")
