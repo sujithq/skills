@@ -6,7 +6,7 @@ Collection of GitHub Copilot skills for enhanced productivity.
 
 - **pdf-to-markdown**: Convert PDF and Office files to Markdown using Microsoft's `markitdown` package. Supports multiple file formats: PDF, PowerPoint, Word, Excel.
 - **commit-message-writer**: Generate conventional commit messages following best practices. Supports all standard commit types: feat, fix, docs, style, refactor, perf, test, chore.
-- **create-image**: Generate images using Azure OpenAI DALL-E models through the Azure Image MCP Server. Enables AI-powered image creation with customizable quality, size, and style options.
+- **create-image**: Generate images using Azure OpenAI DALL-E models through direct API calls. Provides Python and curl examples for AI-powered image creation with customizable quality, size, and style options.
 
 ## Installation
 
