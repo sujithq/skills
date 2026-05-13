@@ -1,3 +1,4 @@
+# [](https://github.com/sujithq/skills/compare/v1.8.0...v) (2026-05-13)
 # [](https://github.com/sujithq/skills/compare/v1.7.0...v) (2026-05-13)
 
 
