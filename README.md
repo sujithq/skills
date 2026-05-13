@@ -6,7 +6,7 @@ Collection of GitHub Copilot skills for enhanced productivity.
 
 - **pdf-to-markdown**: Convert PDF and Office files to Markdown using Microsoft's `markitdown` package. Supports multiple file formats: PDF, PowerPoint, Word, Excel.
 - **commit-message-writer**: Generate conventional commit messages following best practices. Supports all standard commit types: feat, fix, docs, style, refactor, perf, test, chore.
-- **image-mcp**: Generate images using Azure OpenAI DALL-E models through the Azure Image MCP Server. Enables AI-powered image creation with customizable quality, size, and style options.
+- **create-image**: Generate images using Azure OpenAI DALL-E models through the Azure Image MCP Server. Enables AI-powered image creation with customizable quality, size, and style options.
 
 ## Installation
 
@@ -30,7 +30,7 @@ Install skills one at a time:
 ```powershell
 gh skill install sujithq/skills commit-message-writer
 gh skill install sujithq/skills pdf-to-markdown
-gh skill install sujithq/skills image-mcp
+gh skill install sujithq/skills create-image
 ```
 
 ### Option 3: Install from Marketplace (Future)
@@ -77,7 +77,7 @@ npm install -g @commitlint/cli @commitlint/config-conventional
 │   │   └── SKILL.md
 │   ├── pdf-to-markdown/
 │   │   └── SKILL.md
-│   └── image-mcp/
+│   └── create-image/
 │       └── SKILL.md
 ├── plugin.json            # Plugin manifest for all-in-one install
 ├── publish.ps1            # Publishing automation script
@@ -162,7 +162,7 @@ This project enforces [Conventional Commits](https://www.conventionalcommits.org
 **Scope** (optional):
 - `commit-writer`: Commit message writer skill
 - `pdf-markdown`: PDF to Markdown converter skill
-- `image-mcp`: Azure Image MCP Server skill
+- `create-image`: Azure Image MCP Server skill
 
 **Subject** (required):
 - Imperative mood ("add" not "added")

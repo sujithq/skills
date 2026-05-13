@@ -1,5 +1,5 @@
 ---
-name: image-mcp
+name: create-image
 description: Generate images using Azure OpenAI DALL-E models through the Azure Image MCP Server. Use this skill when the user asks to create images, generate visuals, or produce artwork using AI.
 license: MIT
 ---
