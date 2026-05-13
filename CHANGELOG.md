@@ -1,3 +1,10 @@
+# [](https://github.com/sujithq/skills/compare/v1.7.0...v) (2026-05-13)
+
+
+### Features
+
+* **image-mcp:** create skill for Azure Image MCP Server ([bf3794a](https://github.com/sujithq/skills/commit/bf3794a493843eeda12e1b7448de8d7a5b7af685))
+* **plugin:** add create-image skill to plugin.json ([4531d70](https://github.com/sujithq/skills/commit/4531d7087b394727a30a8ab956ef1325c5d8253c))
 # [](https://github.com/sujithq/skills/compare/v1.6.0...v) (2026-05-04)
 
 
