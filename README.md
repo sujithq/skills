@@ -56,6 +56,8 @@ Or reference directly in prompts when in agent mode.
 
 For a full start-from-scratch walkthrough, see [Use Copilot Issue Image Generation in a New Repository](docs/copilot-issue-image.md).
 
+To use this repository as a reusable hub for local and curated external skills, see [Skills Hub Workflow](docs/skills-hub.md).
+
 ## Development Setup
 
 ### Prerequisites
@@ -108,6 +110,8 @@ apm pack --dry-run --verbose
 ```
 
 The package contract is intentionally limited to the four skill directories listed in `apm.yml` includes. Project-only prompts, agents, and generated dependency output should not be committed as package contents unless they are meant for consumers. `plugin.json` only carries bundle metadata; APM auto-discovers skills from the `skills/` directory.
+
+For the full hub workflow, including adding external skills and keeping them updated, see [Skills Hub Workflow](docs/skills-hub.md).
 
 ### Quick Start
 ```powershell
