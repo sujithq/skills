@@ -1,0 +1,12 @@
+name: skills
+version: 1.0.0
+description: APM project for skills
+author: Sujith
+targets:
+- copilot
+dependencies:
+  apm:
+  - microsoft/apm-sample-package
+  mcp: []
+includes: auto
+scripts: {}

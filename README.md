@@ -7,6 +7,7 @@ Collection of GitHub Copilot skills for enhanced productivity.
 - **pdf-to-markdown**: Convert PDF and Office files to Markdown using Microsoft's `markitdown` package. Supports multiple file formats: PDF, PowerPoint, Word, Excel.
 - **commit-message-writer**: Generate conventional commit messages following best practices. Supports all standard commit types: feat, fix, docs, style, refactor, perf, test, chore.
 - **create-image**: Generate images using Azure OpenAI DALL-E models through direct API calls. Provides Python and curl examples for AI-powered image creation with customizable quality, size, and style options.
+- **copilot-issue-image**: Prepare GitHub Copilot issue-assigned workflows for Azure OpenAI image generation with non-interactive authentication.
 
 ## Installation
 
@@ -31,6 +32,7 @@ Install skills one at a time:
 gh skill install sujithq/skills commit-message-writer
 gh skill install sujithq/skills pdf-to-markdown
 gh skill install sujithq/skills create-image
+gh skill install sujithq/skills copilot-issue-image
 ```
 
 ### Option 3: Install from Marketplace (Future)
@@ -51,6 +53,8 @@ copilot
 ```
 
 Or reference directly in prompts when in agent mode.
+
+For a full start-from-scratch walkthrough, see [Use Copilot Issue Image Generation in a New Repository](docs/copilot-issue-image.md).
 
 ## Development Setup
 
@@ -77,7 +81,9 @@ npm install -g @commitlint/cli @commitlint/config-conventional
 │   │   └── SKILL.md
 │   ├── pdf-to-markdown/
 │   │   └── SKILL.md
-│   └── create-image/
+│   ├── create-image/
+│   │   └── SKILL.md
+│   └── copilot-issue-image/
 │       └── SKILL.md
 ├── plugin.json            # Plugin manifest for all-in-one install
 ├── publish.ps1            # Publishing automation script
