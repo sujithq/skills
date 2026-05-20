@@ -1,5 +1,6 @@
 ---
 applyTo: "**"
+description: "Design and accessibility standards for this skills repository"
 ---
 
 # Design Standards

@@ -1,6 +1,6 @@
 # skills
 
-Collection of GitHub Copilot skills for enhanced productivity.
+Collection of GitHub Copilot skills for enhanced productivity, packaged for APM and Copilot skill installers.
 
 ## Available skills
 
@@ -11,18 +11,17 @@ Collection of GitHub Copilot skills for enhanced productivity.
 
 ## Installation
 
-### Option 1: Install as Plugin (Recommended)
-Install all skills at once:
+### Option 1: Install with APM (Recommended)
+Install all skills into a Copilot-targeted workspace:
 
 ```powershell
-copilot plugin install sujithq/skills
+apm install sujithq/skills --target copilot
 ```
 
-Then in Copilot CLI:
-```
-copilot
-/skills list
-/skills info commit-message-writer
+For reproducible installs, pin a release tag:
+
+```powershell
+apm install sujithq/skills#v1.0.0 --target copilot
 ```
 
 ### Option 2: Install Individual Skills
@@ -36,10 +35,11 @@ gh skill install sujithq/skills copilot-issue-image
 ```
 
 ### Option 3: Install from Marketplace (Future)
-As plugin marketplaces mature:
+As APM marketplaces mature:
 
 ```powershell
-copilot plugin install awesome-copilot/sujithq-skills
+apm marketplace add github/awesome-copilot
+apm install sujithq-skills@awesome-copilot
 ```
 
 ## Usage
@@ -85,7 +85,9 @@ npm install -g @commitlint/cli @commitlint/config-conventional
 │   │   └── SKILL.md
 │   └── copilot-issue-image/
 │       └── SKILL.md
-├── plugin.json            # Plugin manifest for all-in-one install
+├── apm.yml                # APM package manifest
+├── plugin.json            # APM-compatible plugin bundle metadata
+├── build/                 # Generated APM bundle output from apm pack
 ├── publish.ps1            # Publishing automation script
 ├── suggest-version.ps1    # Version suggestion script
 ├── .commitlintrc.json     # Commit validation rules
@@ -93,6 +95,19 @@ npm install -g @commitlint/cli @commitlint/config-conventional
 ```
 
 ## Publishing
+
+### APM Validation
+
+Before publishing or tagging a release, validate the APM package shape:
+
+```powershell
+apm install --target copilot
+apm audit --ci
+apm compile --dry-run
+apm pack --dry-run --verbose
+```
+
+The package contract is intentionally limited to the four skill directories listed in `apm.yml` includes. Project-only prompts, agents, and generated dependency output should not be committed as package contents unless they are meant for consumers. `plugin.json` only carries bundle metadata; APM auto-discovers skills from the `skills/` directory.
 
 ### Quick Start
 ```powershell

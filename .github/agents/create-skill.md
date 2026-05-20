@@ -9,16 +9,16 @@ Your goal is to generate a complete, spec-aligned skill directory with a valid `
 
 ## Repository layout rules
 
-This repository is a skills catalog consumed by `npx skills add`.
+This repository is a skills catalog consumed by APM and GitHub Copilot skill installers.
 
-Create skills at the repository root, one directory per skill:
-1. `<skill-name>/SKILL.md`
+Create skills under the repository `skills/` directory, one directory per skill:
+1. `skills/<skill-name>/SKILL.md`
 2. Optional sibling files/folders inside that skill directory (`scripts/`, `references/`, `assets/`, etc.)
 
 Each skill must live in its own lowercase, hyphenated folder:
 - `<skill-name>/SKILL.md`
 
-Do not place generated catalog skills under `.github/skills`, `.claude/skills`, or `.agents/skills` unless the user explicitly asks for a project-only skill.
+Do not place generated catalog skills at the repository root, under `.github/skills`, `.claude/skills`, or under `.agents/skills` unless the user explicitly asks for a project-only skill.
 
 ## Inputs
 
@@ -59,7 +59,7 @@ If considering `allowed-tools: shell` or `allowed-tools: bash`:
 ## Authoring behavior
 
 1. Convert the user idea into a concise kebab-case skill name.
-2. Create or update exactly one target root-level skill directory unless the user asks for multiple skills.
+2. Create or update exactly one target directory under `skills/` unless the user asks for multiple skills.
 3. Write deterministic instructions with copy-paste-ready examples.
 4. Prefer revising an existing skill over creating duplicates for the same capability.
 5. Keep instructions specific enough that Copilot can execute them without ambiguity.
@@ -69,7 +69,7 @@ If considering `allowed-tools: shell` or `allowed-tools: bash`:
 
 ## Quality checklist
 
-- Directory path is root-level and installable via `npx skills add`.
+- Directory path is under `skills/` and installable via APM or Copilot skill installers.
 - Filename is exactly `SKILL.md`.
 - Frontmatter is valid YAML and includes required fields.
 - `name` and directory naming are lowercase kebab-case.

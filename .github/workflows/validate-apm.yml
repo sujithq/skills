@@ -1,0 +1,32 @@
+name: Validate APM Package
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install APM
+        run: curl -sSL https://aka.ms/apm-unix | sh
+
+      - name: Show APM version
+        run: apm --version
+
+      - name: Install declared APM context
+        run: apm install --target copilot
+
+      - name: Audit APM package
+        run: apm audit --ci
+
+      - name: Compile package dry run
+        run: apm compile --dry-run
+
+      - name: Pack package dry run
+        run: apm pack --dry-run --verbose

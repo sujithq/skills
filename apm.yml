@@ -1,12 +1,21 @@
-name: skills
+name: sujithq-skills
 version: 1.0.0
-description: APM project for skills
-author: Sujith
-targets:
-- copilot
+description: Productivity skills for GitHub Copilot and APM
+author: sujithq
+license: MIT
+target: copilot
+type: skill
+includes:
+- plugin.json
+- skills/commit-message-writer/
+- skills/pdf-to-markdown/
+- skills/create-image/
+- skills/copilot-issue-image/
 dependencies:
-  apm:
-  - microsoft/apm-sample-package
+  apm: []
   mcp: []
-includes: auto
-scripts: {}
+scripts:
+  start: apm pack --dry-run --verbose
+  audit: apm audit
+  compile: apm compile --dry-run
+  pack: apm pack --dry-run --verbose
