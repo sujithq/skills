@@ -1,3 +1,9 @@
+# [](https://github.com/sujithq/skills/compare/v1.9.1...v) (2026-05-20)
+
+
+### Features
+
+* enhance skills hub release process with new workflows and documentation updates ([a4330a5](https://github.com/sujithq/skills/commit/a4330a50e19a28f5bd946e330ce7feaafcde5f8e))
 # [](https://github.com/sujithq/skills/compare/v1.9.0...v) (2026-05-20)
 
 
