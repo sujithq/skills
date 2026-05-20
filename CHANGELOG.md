@@ -1,3 +1,9 @@
+# [](https://github.com/sujithq/skills/compare/v1.9.0...v) (2026-05-20)
+
+
+### Bug Fixes
+
+* update image generation parameters for improved output quality and size options for gpt-image ([6f48fe0](https://github.com/sujithq/skills/commit/6f48fe08eb1190d8f4ead30ac37d7c8ffc1416e1))
 # [](https://github.com/sujithq/skills/compare/v1.8.1...v) (2026-05-20)
 
 
