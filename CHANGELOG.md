@@ -1,3 +1,9 @@
+# [](https://github.com/sujithq/skills/compare/v1.8.1...v) (2026-05-20)
+
+
+### Features
+
+* add copilot-issue-image skill and related documentation; enhance README and plugin.json ([27e4745](https://github.com/sujithq/skills/commit/27e47459231505919c397e35cb35a4cc2ab9b42d))
 # [](https://github.com/sujithq/skills/compare/v1.8.0...v) (2026-05-13)
 # [](https://github.com/sujithq/skills/compare/v1.7.0...v) (2026-05-13)
 
