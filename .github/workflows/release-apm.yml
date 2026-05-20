@@ -1,0 +1,42 @@
+name: Release APM Package
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install APM
+        run: curl -sSL https://aka.ms/apm-unix | sh
+
+      - name: Install declared APM context
+        run: apm install --target copilot
+
+      - name: Audit APM package
+        run: apm audit --ci
+
+      - name: Compile package dry run
+        run: apm compile --dry-run
+
+      - name: Pack release archive
+        run: apm pack --archive -o ./dist
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            gh release upload "$TAG_NAME" dist/*.tar.gz --clobber
+          else
+            gh release create "$TAG_NAME" dist/*.tar.gz --title "$TAG_NAME" --notes "APM skills hub release $TAG_NAME"
+          fi

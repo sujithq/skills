@@ -97,6 +97,8 @@ apm pack --dry-run --verbose
 
 Review the diff carefully before committing. External updates can change the skills that downstream users receive.
 
+Curated skill updates should be released just like local skill changes. After committing the updated `apm.yml` and `apm.lock.yaml`, create a new hub release so consumers can pin or upgrade to the refreshed hub state.
+
 ## How Others Use the Hub
 
 Other users do not need to understand how the hub is assembled. They install this repository as one package and receive the skills you publish from `skills/` plus any curated external dependencies declared in `apm.yml`.
@@ -187,22 +189,66 @@ Consumers do not receive:
 
 ## Release the Hub
 
-Validate the package:
+Create a new release whenever consumers should receive a new hub state:
+
+- a local skill is added, removed, or changed
+- a curated external skill is added, removed, or updated
+- package metadata changes in `apm.yml` or `plugin.json`
+
+Commit the hub change first, then run the release script:
+
+```powershell
+./publish.ps1
+```
+
+The script suggests the next semantic version from commit messages, updates `apm.yml`, `plugin.json`, and `CHANGELOG.md`, validates the APM package, creates a release archive under `dist/`, commits release metadata, tags the release, and pushes the release commit and tag.
+
+Use an explicit version when needed:
+
+```powershell
+./publish.ps1 -Version 1.2.0
+```
+
+Preview validation without changing files:
+
+```powershell
+./publish.ps1 -DryRun
+```
+
+Pushing a `v*.*.*` tag starts the `Release APM Package` GitHub Actions workflow. The workflow rebuilds the APM archive and uploads it to the GitHub release.
+
+### Manual Release Steps
+
+If you do not use `publish.ps1`, perform the same steps manually.
+
+Update `apm.yml` and `plugin.json` to the release version, then update the changelog:
+
+```powershell
+npm install -g conventional-changelog-cli
+conventional-changelog -p angular -i CHANGELOG.md -s
+```
+
+Validate the package and build an archive:
 
 ```powershell
 apm install --target copilot
 apm audit --ci
 apm compile --dry-run
-apm pack --dry-run --verbose
+apm pack --archive -o ./dist
 ```
 
-Create a distributable bundle:
+Commit the release metadata and push the tag:
 
 ```powershell
-apm pack
+git add CHANGELOG.md apm.yml plugin.json
+if (Test-Path apm.lock.yaml) { git add apm.lock.yaml }
+git commit -m "chore: release v1.2.0"
+git tag v1.2.0
+git push origin HEAD
+git push origin v1.2.0
 ```
 
-The generated bundle appears under `build/` and includes `plugin.json`, local skills, curated dependencies resolved by APM, and package metadata needed by consumers.
+The generated bundle appears under `build/` for directory bundles or `dist/` for release archives. It includes `plugin.json`, local skills, curated dependencies resolved by APM, and package metadata needed by consumers.
 
 ## Rules of Thumb
 

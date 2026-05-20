@@ -4,3 +4,4 @@ apm_modules/
 
 # APM package output
 build/
+dist/

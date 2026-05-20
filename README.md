@@ -93,7 +93,7 @@ npm install -g @commitlint/cli @commitlint/config-conventional
 ├── publish.ps1            # Publishing automation script
 ├── suggest-version.ps1    # Version suggestion script
 ├── .commitlintrc.json     # Commit validation rules
-└── validate-commits.yml   # GitHub Actions workflow
+└── .github/workflows/     # Validation and release workflows
 ```
 
 ## Publishing
@@ -113,20 +113,33 @@ The package contract is intentionally limited to the four skill directories list
 
 For the full hub workflow, including adding external skills and keeping them updated, see [Skills Hub Workflow](docs/skills-hub.md).
 
+### Release Rule
+
+Create a new release whenever consumers should receive a new hub state, including:
+
+- adding, removing, or changing a local skill under `skills/`
+- updating curated external skills in `apm.yml` or `apm.lock.yaml`
+- changing package metadata that affects installation
+
 ### Quick Start
 ```powershell
-# 1. Make commits with conventional format
+# 1. Commit the hub change with conventional format
 git commit -m "feat: add new skill"
 
-# 2. Run publish script (handles everything)
+# 2. Run release script
 ./publish.ps1
 
-# That's it! Script will:
+# The script will:
 # - Suggest version based on commits
+# - Update apm.yml and plugin.json versions
 # - Update CHANGELOG.md
-# - Create git tag
-# - Publish to GitHub
+# - Validate with APM
+# - Pack a release archive under dist/
+# - Create a release commit and tag
+# - Push the release commit and tag
 ```
+
+Pushing the tag starts the `Release APM Package` workflow, which builds the APM archive and uploads it to the GitHub release.
 
 ### Manual Publishing
 
@@ -136,19 +149,24 @@ If you prefer manual control:
 # 1. Check suggested version
 ./suggest-version.ps1
 
-# 2. Update changelog
+# 2. Update apm.yml and plugin.json to the release version
+
+# 3. Update changelog
 npm install -g conventional-changelog-cli
 conventional-changelog -p angular -i CHANGELOG.md -s
 
-# 3. Commit
-git add CHANGELOG.md
-git commit -m "docs: update changelog for v1.2.0"
+# 4. Validate and pack
+apm install --target copilot
+apm audit --ci
+apm compile --dry-run
+apm pack --archive -o ./dist
 
-# 4. Publish
-gh skill publish --tag v1.2.0
-
-# 5. Sync git tag
+# 5. Commit version/changelog updates and tag
+git add CHANGELOG.md apm.yml plugin.json
+if (Test-Path apm.lock.yaml) { git add apm.lock.yaml }
+git commit -m "chore: release v1.2.0"
 git tag v1.2.0
+git push origin HEAD
 git push origin v1.2.0
 ```
 

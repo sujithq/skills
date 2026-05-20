@@ -60,7 +60,7 @@ if ($hasBreaking) {
 $suggestedVersion = "v$major.$minor.$patch"
 
 Write-Host "`n✓ Suggested next version: $suggestedVersion ($bump)" -ForegroundColor Green
-Write-Host "`nTo publish:`n" -ForegroundColor Cyan
+Write-Host "`nTo release the skills hub:`n" -ForegroundColor Cyan
 Write-Host "  git add ." -ForegroundColor Gray
 Write-Host "  git commit -m ""feat: describe your change"""
-Write-Host "  gh skill publish --tag $suggestedVersion" -ForegroundColor Green
+Write-Host "  ./publish.ps1 -Version $suggestedVersion" -ForegroundColor Green
