@@ -18,10 +18,19 @@ Install all skills into a Copilot-targeted workspace:
 apm install sujithq/skills --target copilot
 ```
 
+Direct GitHub installs create an `apm_modules/` source cache that can include internal hub files such as `publish.ps1`. Runtime skills are installed under `.agents/skills/`; use a packed release archive if you want only packaged runtime files on disk.
+
 For reproducible installs, pin a release tag:
 
 ```powershell
 apm install sujithq/skills#v1.0.0 --target copilot
+```
+
+For a clean archive install from a GitHub release:
+
+```powershell
+gh release download v1.10.0 --repo sujithq/skills --pattern "sujithq-skills-*.tar.gz"
+apm install ./sujithq-skills-1.10.0.tar.gz --target copilot
 ```
 
 ### Option 2: Install Individual Skills
