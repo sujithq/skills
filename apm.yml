@@ -11,6 +11,8 @@ includes:
 - skills/pdf-to-markdown/
 - skills/create-image/
 - skills/copilot-issue-image/
+- skills/token-optimization-check/
+- skills/token-optimization-fix/
 dependencies:
   apm: []
   mcp: []

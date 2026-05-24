@@ -8,6 +8,8 @@ Collection of GitHub Copilot skills for enhanced productivity, packaged for APM 
 - **commit-message-writer**: Generate conventional commit messages following best practices. Supports all standard commit types: feat, fix, docs, style, refactor, perf, test, chore.
 - **create-image**: Generate images using Azure OpenAI DALL-E models through direct API calls. Provides Python and curl examples for AI-powered image creation with customizable quality, size, and style options.
 - **copilot-issue-image**: Prepare GitHub Copilot issue-assigned workflows for Azure OpenAI image generation with non-interactive authentication.
+- **token-optimization-check**: Audit a repo for GitHub Copilot token-optimization compliance. Scores `copilot-instructions.md`, `AGENTS.md`, MCP config, and large files against 10 rules and emits a remediation report.
+- **token-optimization-fix**: Apply fixes from the audit. Compresses always-on context files, removes discoverable facts, adds output-control directives, dedupes `AGENTS.md` vs `copilot-instructions.md`, and prunes workspace MCP servers — with diff preview before every write.
 
 ## Installation
 
@@ -41,6 +43,8 @@ gh skill install sujithq/skills commit-message-writer
 gh skill install sujithq/skills pdf-to-markdown
 gh skill install sujithq/skills create-image
 gh skill install sujithq/skills copilot-issue-image
+gh skill install sujithq/skills token-optimization-check
+gh skill install sujithq/skills token-optimization-fix
 ```
 
 ### Option 3: Install from Marketplace (Future)
@@ -94,7 +98,11 @@ npm install -g @commitlint/cli @commitlint/config-conventional
 │   │   └── SKILL.md
 │   ├── create-image/
 │   │   └── SKILL.md
-│   └── copilot-issue-image/
+│   ├── copilot-issue-image/
+│   │   └── SKILL.md
+│   ├── token-optimization-check/
+│   │   └── SKILL.md
+│   └── token-optimization-fix/
 │       └── SKILL.md
 ├── apm.yml                # APM package manifest
 ├── plugin.json            # APM-compatible plugin bundle metadata
@@ -118,7 +126,7 @@ apm compile --dry-run
 apm pack --dry-run --verbose
 ```
 
-The package contract is intentionally limited to the four skill directories listed in `apm.yml` includes. Project-only prompts, agents, and generated dependency output should not be committed as package contents unless they are meant for consumers. `plugin.json` only carries bundle metadata; APM auto-discovers skills from the `skills/` directory.
+The package contract is intentionally limited to the skill directories listed in `apm.yml` includes. Project-only prompts, agents, and generated dependency output should not be committed as package contents unless they are meant for consumers. `plugin.json` only carries bundle metadata; APM auto-discovers skills from the `skills/` directory.
 
 For the full hub workflow, including adding external skills and keeping them updated, see [Skills Hub Workflow](docs/skills-hub.md).
 
